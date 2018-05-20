@@ -1,6 +1,6 @@
 {
-  "name": "travel_insurance",
-  "description": "A Vue.js project",
+  "name": "travel_quotes",
+  "description": "A Vue.js project with Vuetify",
   "version": "1.0.0",
   "author": "Eduardo Cabrera Japa <dvex_92@hotmail.com>",
   "license": "MIT",

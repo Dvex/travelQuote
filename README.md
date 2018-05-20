@@ -1,6 +1,6 @@
-# travel_insurance
+# Travel Quotes
 
-> A Vue.js project
+> A Vue.js project with Vuetify
 
 ## Build Setup
 
