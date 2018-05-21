@@ -14,7 +14,6 @@
 <script>
   /* Components */
   import Quote from './components/Quote'
-  import ResultQuote from './components/ResultQuote'
 
   export default {
     data: function(){
@@ -23,8 +22,7 @@
       }
     },
     components: {
-      'quote': Quote,
-      'result-quote': ResultQuote
+      'quote': Quote
     }
   }
 </script>

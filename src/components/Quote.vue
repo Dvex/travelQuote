@@ -1,14 +1,16 @@
 <template>
     <div>
         <v-container fluid>
+            <v-alert :value="alert" type="error">
+                Porfavor, para realizar una cotización necesita ingresar todos los datos.
+            </v-alert>
             <v-layout row wrap>
                 <v-flex xs6>
                     <v-select
-                    :items="items"
+                    :items="destinations"
                     v-model="destiny"
-                    :error-messages="['Porfavor seleccione una opción']"
                     label="Destino"
-                    item-value="text"
+                    autocomplete
                     ></v-select>
                 </v-flex>
                 <v-flex xs6>
@@ -72,35 +74,82 @@
                 <v-flex xs12 md4></v-flex>
             </v-layout>
         </v-container>
+
+        <v-container fluid>
+            <v-layout row wrap>
+                <v-flex xs12>
+                    <result-quote :result="result_quote"></result-quote>
+                </v-flex>
+            </v-layout>
+        </v-container>
     </div>
 </template>
 
 <script>
+    import ResultQuote from './ResultQuote'
+
     export default {
         data: function() {
             return {
+                alert: false,
                 destiny: null,
                 startDate: null,
                 endDate: null,
+                number_passenger: null,
                 startMenu: false,
                 endMenu: false,
                 dateFormatted: null,
-                number_passenger: null,
-                items: [
-                    { text: 'State 1' },
-                    { text: 'State 2' },
-                    { text: 'State 3' },
-                    { text: 'State 4' },
-                    { text: 'State 5' },
-                    { text: 'State 6' },
-                    { text: 'State 7' }
-                ],
+                destinations: [],
+                result_quote: []
             }
         },
         methods: {
-            doQuote: function(){
-                console.log('Cotizar')
+            fecthDestinations:function (){
+                this.$http.get('destinos').then(
+                    response => {
+                        return response.json()
+                    },
+                    error => {
+                        console.log(error)
+                    }
+                ).then(
+                    data => {
+                        this.destinations = data
+                    }
+                )
+            },
+            doQuote: function() {
+                if(this.destiny == null && this.startDate == null && this.endDate == null && this.number_passenger == null){
+                    this.alert = true
+                } else {
+                    this.alert = false
+                }
+
+                if(!this.alert)
+                    this.$http.post('cotizacion', {
+                        destino: this.destiny,
+                        fecha_partida: this.startDate,
+                        fecha_retorno: this.endDate,
+                        cantidad_pasajeros: this.number_passenger
+                    }).then(
+                        response => {
+                            return response.json()
+                        },
+                        error => {
+                            console.log(error)
+                        }
+                    ).then(
+                        data => {
+                            this.result_quote = data
+                        }
+                    );
             }
+        },
+        beforeMount() {
+            this.fecthDestinations();
+        },
+        components: {
+          'result-quote': ResultQuote
         }
     }
 </script>
