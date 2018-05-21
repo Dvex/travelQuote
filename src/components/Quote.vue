@@ -5,7 +5,7 @@
                 Porfavor, para realizar una cotización necesita ingresar todos los datos.
             </v-alert>
             <v-layout row wrap>
-                <v-flex xs6 md5>
+                <v-flex xs12 md5>
                     <v-select
                     :items="destinations"
                     v-model="destiny"
@@ -15,7 +15,7 @@
                     ></v-select>
                 </v-flex>
                 <v-flex md2></v-flex>
-                <v-flex xs6 md5>
+                <v-flex xs12 md5>
                     <v-text-field
                     id="number_passenger"
                     name="passenger"
@@ -27,7 +27,7 @@
             </v-layout>
 
             <v-layout row wrap>
-                <v-flex xs6 md5>
+                <v-flex xs12 md5>
                     <v-menu
                         ref="startMenu"
                         :close-on-content-click="false"
@@ -50,7 +50,7 @@
                     </v-menu>
                 </v-flex>
                 <v-flex md2></v-flex>
-                <v-flex xs6 md5>
+                <v-flex xs12 md5>
                     <v-menu
                         ref="endMenu"
                         :close-on-content-click="false"
