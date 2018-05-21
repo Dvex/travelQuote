@@ -5,7 +5,6 @@
           <h1>{{ title }}</h1>
 
           <quote></quote>
-          <result-quote></result-quote>
         </v-container>
       </v-content>
   </v-app>

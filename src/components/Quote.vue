@@ -5,23 +5,29 @@
                 Porfavor, para realizar una cotización necesita ingresar todos los datos.
             </v-alert>
             <v-layout row wrap>
-                <v-flex xs6>
+                <v-flex xs6 md5>
                     <v-select
                     :items="destinations"
                     v-model="destiny"
                     label="Destino"
+                    prepend-icon="flight_takeoff"
                     autocomplete
                     ></v-select>
                 </v-flex>
-                <v-flex xs6>
+                <v-flex md2></v-flex>
+                <v-flex xs6 md5>
                     <v-text-field
                     id="number_passenger"
                     name="passenger"
                     v-model="number_passenger"
+                    prepend-icon="accessibility"
                     label="Numero de pasajeros"
                     ></v-text-field>
                 </v-flex>
-                <v-flex xs6>
+            </v-layout>
+
+            <v-layout row wrap>
+                <v-flex xs6 md5>
                     <v-menu
                         ref="startMenu"
                         :close-on-content-click="false"
@@ -43,7 +49,8 @@
                         <v-date-picker v-model="startDate" no-title @input="startMenu = false"></v-date-picker>
                     </v-menu>
                 </v-flex>
-                <v-flex xs6>
+                <v-flex md2></v-flex>
+                <v-flex xs6 md5>
                     <v-menu
                         ref="endMenu"
                         :close-on-content-click="false"
@@ -75,10 +82,10 @@
             </v-layout>
         </v-container>
 
-        <v-container fluid>
+        <v-container fluid v-if="result_headers.length > 0">
             <v-layout row wrap>
                 <v-flex xs12>
-                    <result-quote :result="result_quote"></result-quote>
+                    <result-quote :headers="result_headers" :characteristics="result_characteristics"></result-quote>
                 </v-flex>
             </v-layout>
         </v-container>
@@ -100,7 +107,8 @@
                 endMenu: false,
                 dateFormatted: null,
                 destinations: [],
-                result_quote: []
+                result_headers: [],
+                result_characteristics: []
             }
         },
         methods: {
@@ -140,7 +148,28 @@
                         }
                     ).then(
                         data => {
-                            this.result_quote = data
+                            this.result_headers = []
+                            this.result_headers.push({ text: 'Caracteristicas', align: 'left' })
+
+                            for(let result of data){
+                                
+                                let plan = {
+                                    text: result.tipo_plan,
+                                    align: 'center',
+                                    price_plan: result.precio_plan
+                                }
+
+                                this.result_headers.push(plan);
+
+                                if(result.tipo_plan == 'Plan Standard'){
+                                    this.result_characteristics = result.caracteristicas
+                                } else {
+                                    this.result_characteristics.forEach((item, index) => {
+                                        Object.assign(item, { aplica_premiun: result.caracteristicas[index].aplica })
+                                    })
+                                }
+                                
+                            }
                         }
                     );
             }

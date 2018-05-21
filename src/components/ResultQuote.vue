@@ -1,32 +1,40 @@
 <template>
     <div>
         <v-container fluid>
-            <v-layout row wrap> 
-                <pre>{{ result | json }}</pre>
-                <v-flex md6></v-flex>
-                <v-flex xs6 md3>
-                    <h3>Plan Estándar</h3>
-                    <p>$ 54.2</p>
-                </v-flex>
-                <v-flex xs6 md3>
-                    <h3>Plan Premiun</h3>
-                    <p>$ 74.2</p>
-                </v-flex>
-            </v-layout>
-        </v-container>
+            <v-data-table
+            :headers="headers"
+            :items="characteristics"
+            :loading="true"
+            hide-actions
+            class="elevation-1"
+            >
+                <v-progress-linear slot="progress" color="blue"></v-progress-linear>
+                <template slot="headers" slot-scope="props">
+                    <tr>
+                        <th 
+                            v-for="header in props.headers"
+                            :key="header.text"
+                        >
+                            <span>{{ header.text }}</span>
+                            <br>
+                            <span v-if="header.price_plan">$ {{ header.price_plan }}</span>
+                        </th>
+                    </tr>
+                </template>
 
-        <v-data-table
-        :headers="headers"
-        :items="desserts"
-        hide-actions
-        class="elevation-1"
-        >
-            <template slot="items" slot-scope="props">
-            <td>{{ props.item.name }}</td>
-            <td class="text-xs-right">{{ props.item.calories }}</td>
-            <td class="text-xs-right">{{ props.item.fat }}</td>
-            </template>
-        </v-data-table>
+                <template slot="items" slot-scope="props">
+                    <td width="60%">{{ props.item.caracteristica }}</td>
+                    <td width="20%" style="text-align:center !important" class="text-xs-right">
+                        <v-icon medium color="green darken-2" v-if="props.item.aplica">check</v-icon>
+                        <v-icon medium color="red darken-2" v-if="!props.item.aplica">close</v-icon>
+                    </td>
+                    <td  width="20%" style="text-align:center !important" class="text-xs-right">
+                        <v-icon medium color="green darken-2" v-if="props.item.aplica_premiun">check</v-icon>
+                        <v-icon medium color="red darken-2" v-if="!props.item.aplica_premiun">close</v-icon>
+                    </td>
+                </template>
+            </v-data-table>
+        </v-container>
     </div>
 </template>
 
@@ -34,88 +42,10 @@
     export default {
         data: function() {
             return {
-                headers: [
-                    {
-                        text: 'Características',
-                        align: 'left',
-                        value: 'coverage'
-                    },
-                    { 
-                        text: '',
-                        align: 'left',
-                        sortable: false
-                    },
-                    { 
-                        text: '',
-                        align: 'left', 
-                        sortable: false
-                    }
-                ],
-                desserts: [
-                    {
-                        value: false,
-                        name: 'Frozen Yogurt',
-                        calories: 159,
-                        fat: 6.0
-                    },
-                    {
-                        value: false,
-                        name: 'Ice cream sandwich',
-                        calories: 237,
-                        fat: 9.0
-                    },
-                    {
-                        value: false,
-                        name: 'Eclair',
-                        calories: 262,
-                        fat: 16.0
-                    },
-                    {
-                        value: false,
-                        name: 'Cupcake',
-                        calories: 305,
-                        fat: 3.7
-                    },
-                    {
-                        value: false,
-                        name: 'Gingerbread',
-                        calories: 356,
-                        fat: 16.0
-                    },
-                    {
-                        value: false,
-                        name: 'Jelly bean',
-                        calories: 375,
-                        fat: 0.0
-                    },
-                    {
-                        value: false,
-                        name: 'Lollipop',
-                        calories: 392,
-                        fat: 0.2
-                    },
-                    {
-                        value: false,
-                        name: 'Honeycomb',
-                        calories: 408,
-                        fat: 3.2
-                    },
-                    {
-                        value: false,
-                        name: 'Donut',
-                        calories: 452,
-                        fat: 25.0
-                    },
-                    {
-                        value: false,
-                        name: 'KitKat',
-                        calories: 518,
-                        fat: 26.0
-                    }
-                ]
+
             }
         },
-        props: ['result'],
+        props: ['headers', 'characteristics'],
         methods: {}
     }
 </script>
